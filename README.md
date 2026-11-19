@@ -3,7 +3,7 @@
 
 **Developed & Maintained by Arshad Ghodake**
 
-A Java Spring Boot based microservices application demonstrating distributed service architecture with REST APIs, authentication, gRPC communication and Apache Kafka.
+A Java Spring Boot-based microservices application demonstrating distributed service architecture with REST APIs, JWT authentication, gRPC communication, and Apache Kafka.
 
 ## Developer
 
@@ -35,23 +35,23 @@ flowchart TD
     B --> D[Patient Service :4000]
     D <--> E[Billing Service :4001]
     D --> F[Kafka]
-    F --> G[Analytics Service]
+    F --> G[Analytics Service :8080]
 ```
 
 ## Microservices
 
-| Service | Port | Responsibility |
-|---|---:|---|
-| API Gateway | 4004 | Routing and JWT validation |
-| Patient Service | 4000 | Patient management |
-| Auth Service | 4005 | Authentication and JWT |
-| Billing Service | 4001 | Billing and gRPC |
-| Analytics Service | Check configuration | Kafka event consumption |
+| Service | HTTP Port | gRPC Port | Responsibility |
+|---|---:|---:|---|
+| API Gateway | 4004 | — | Routing and JWT validation |
+| Patient Service | 4000 | 9090 | Patient management |
+| Auth Service | 4005 | — | Authentication and JWT |
+| Billing Service | 4001 | 9001 | Billing and gRPC |
+| Analytics Service | 8080 | — | Kafka event consumption |
 
 ## Prerequisites
 
 - Java 21
-- Maven 3.10+
+- Maven (Maven Wrapper included in service directories)
 - Docker Desktop
 - Git
 
@@ -70,7 +70,7 @@ cd patient-management-microservices
 docker compose up -d
 ```
 
-Check container:
+Check running containers:
 
 ```bash
 docker compose ps
@@ -80,18 +80,26 @@ docker compose ps
 
 Set a secure Base64-encoded JWT secret of at least 32 bytes using the `JWT_SECRET` environment variable before starting Auth Service.
 
-### 4. Build the project
+Never commit production secrets to GitHub.
 
-```bash
-mvn clean install -DskipTests
+### 4. Build the services
+
+Each microservice is a separate Maven project.
+
+Open the respective service directory and execute:
+
+```powershell
+.\mvnw.cmd clean package -DskipTests
 ```
+
+Repeat for each service that needs to be built.
 
 ### 5. Run the microservices
 
-Run each Spring Boot service from its respective module using Maven:
+Open each service directory in a separate terminal and run:
 
-```bash
-mvn spring-boot:run
+```powershell
+.\mvnw.cmd spring-boot:run
 ```
 
 Start Billing Service before Patient Service because Patient Service uses its gRPC server.
@@ -112,18 +120,20 @@ http://localhost:4004/api-docs/patients
 ## Features
 
 - Microservices-based architecture
-- Patient REST API
-- JWT-based authentication
-- API Gateway routing
+- Patient REST API and CRUD operations
+- JWT-based authentication and authorization
+- API Gateway routing and token validation
 - Inter-service gRPC communication
 - Kafka-based event consumption
-- API documentation using Swagger
+- API documentation using Swagger / OpenAPI
 - Docker-based Kafka setup
 
 ## Credits
 
-This project was developed as an independent learning and implementation project, inspired by the Java Spring Microservices course by Chris Blakely.
+This project was developed and extended by Arshad Ghodake as an independent learning and implementation project.
+
+The implementation was inspired by concepts and learning material from the Java Spring Microservices course by Chris Blakely.
 
 ## License
 
-Refer to the original repository and applicable third-party component licenses before redistribution.
+This repository may contain code or concepts derived from third-party learning material. Refer to the original repository and applicable third-party component licenses before redistribution.
