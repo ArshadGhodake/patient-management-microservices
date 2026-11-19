@@ -3,7 +3,7 @@
 
 **Developed & Maintained by Arshad Ghodake**
 
-A Java Spring Boot-based microservices application demonstrating distributed service architecture with REST APIs, JWT authentication, gRPC communication, and Apache Kafka.
+Java 21 Spring Boot Microservices Project featuring REST APIs, JWT Authentication, gRPC Communication, Apache Kafka, and Docker.
 
 ## Developer
 
